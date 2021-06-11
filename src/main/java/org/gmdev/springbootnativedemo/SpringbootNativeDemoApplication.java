@@ -8,6 +8,7 @@ public class SpringbootNativeDemoApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringbootNativeDemoApplication.class, args);
+		System.out.println("Did u say something ?!?");
 	}
 
 }
