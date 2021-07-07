@@ -2,21 +2,27 @@ FROM ghcr.io/graalvm/graalvm-ce:ol7-java11-21.1.0 as builder
 
 WORKDIR /app
 
+RUN yum install -y wget
+RUN wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
+RUN yum install -y apache-maven
+RUN gu install native-image
+
 COPY pom.xml /app/pom.xml
+RUN mvn -q clean dependency:go-offline
 
-# For SDKMAN to work we need unzip & zip
-RUN yum install -y unzip zip
+COPY . /app
+#RUN mvn -q package
+RUN mvn -q package -P native
 
-# Install sdkmab, maven and graalVM native-image
-RUN curl -s "https://get.sdkman.io" | bash; \
-    source "$HOME/.sdkman/bin/sdkman-init.sh"; \
-    sdk install maven 3.8.1; \
-    gu install native-image; \
-    mvn -q package -P native \
+#FROM openjdk:11-jre-buster
+#RUN mkdir -p /app
+#COPY --from=builder /app/target/springboot-native-demo.jar /app
+#CMD java -jar /app/springboot-native-demo.jar
+#EXPOSE 4001
 
 #FROM gcr.io/distroless/base-debian10
-#
-#COPY --from=builder /app/target/app.out /
-#
-#EXPOSE 4001
-#CMD ./app.out
+FROM openjdk:11-jre-buster
+RUN mkdir -p /app
+COPY --from=builder /app/target/app.out /app
+CMD ./app/app.out
+EXPOSE 4001
