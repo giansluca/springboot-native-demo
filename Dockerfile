@@ -20,9 +20,13 @@ RUN mvn -q package -P native
 #CMD java -jar /app/springboot-native-demo.jar
 #EXPOSE 4001
 
-#FROM gcr.io/distroless/base-debian10
-FROM openjdk:11-jre-buster
-RUN mkdir -p /app
-COPY --from=builder /app/target/app.out /app
-CMD ./app/app.out
+#FROM openjdk:11-jre-buster
+#RUN mkdir -p /app
+#COPY --from=builder /app/target/app.out /app
+#CMD ./app/app.out
+#EXPOSE 4001
+
+FROM gcr.io/distroless/base-debian10
+COPY --from=builder /app/target/app.out /
+CMD ["./app.out"]
 EXPOSE 4001

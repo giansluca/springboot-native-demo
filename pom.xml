@@ -87,6 +87,7 @@
                             <imageName>app.out</imageName>
                             <buildArgs>
                                 --no-fallback
+                                -H:+StaticExecutableWithDynamicLibC
                             </buildArgs>
                             <skip>false</skip>
                         </configuration>
