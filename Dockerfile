@@ -20,7 +20,7 @@ RUN mvn -q package -P native
 #CMD java -jar /app/springboot-native-demo.jar
 #EXPOSE 4001
 
-#FROM openjdk:11-jre-buster
+#FROM debian:buster-slim
 #RUN mkdir -p /app
 #COPY --from=builder /app/target/app.out /app
 #CMD ./app/app.out
