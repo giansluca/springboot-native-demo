@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  web-app:
+    container_name: springboot-native-demo-0
+    image: springboot-native-demo:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    ports:
+      - "8080:4001"
