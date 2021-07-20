@@ -3,18 +3,18 @@ FROM debian:buster-slim
 WORKDIR /opt
 
 ARG GRAALVM_VERSION=21.1.0
-ARG GRAALVM_FILE_NAME=graalvm-ce-java11-linux-amd64-$GRAALVM_VERSION.tar.gz
-ARG GRAALVM_FOLDER_NAME=graalvm-ce-java11-linux-amd64-$GRAALVM_VERSION
+ARG GRAALVM_FILE_NAME=graalvm-ce-java11-linux-amd64-${GRAALVM_VERSION}.tar.gz
+ARG GRAALVM_FOLDER_NAME=graalvm-ce-java11-linux-amd64-${GRAALVM_VERSION}
 
-ENV PATH=/opt/$GRAALVM_FOLDER_NAME/bin:$PATH
-ENV JAVA_HOME=/opt/$GRAALVM_FOLDER_NAME
+ENV PATH "$PATH:/opt/${GRAALVM_FOLDER_NAME}/bin"
+ENV JAVA_HOME "/opt/${GRAALVM_FOLDER_NAME}"
 
 RUN apt update && apt install -y wget \
-    && wget -q https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-$GRAALVM_VERSION/$GRAALVM_FILE_NAME \
-    && tar -xzf $GRAALVM_FILE_NAME \
-    && rm $GRAALVM_FILE_NAME
-
-
+    && wget -q https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${GRAALVM_VERSION}/${GRAALVM_FILE_NAME} \
+    && tar -xzf ${GRAALVM_FILE_NAME} \
+    && rm ${GRAALVM_FILE_NAME}
+ 
+#RUN echo "export PATH=/new/path:${PATH}" >> /root/.bashrc
 
 # docker build -t base-bomb:latest -f docker/BaseCompileJavaDockerfile .
 # docker run --name base-bomb-0 --rm -i -d base-bomb bash
