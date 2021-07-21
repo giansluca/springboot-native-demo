@@ -1,0 +1,24 @@
+FROM debian:buster-slim
+
+WORKDIR /opt
+
+ARG JAVA_VERSION
+ARG GRAALVM_VERSION
+ARG GRAALVM_FILE_NAME=graalvm-ce-java${JAVA_VERSION}-linux-amd64-${GRAALVM_VERSION}.tar.gz
+ARG GRAALVM_FOLDER_NAME=graalvm-ce-java${JAVA_VERSION}-${GRAALVM_VERSION}
+
+ENV PATH "/opt/${GRAALVM_FOLDER_NAME}/bin:$PATH"
+ENV JAVA_HOME "/opt/${GRAALVM_FOLDER_NAME}"
+
+RUN apt update && apt install -y wget \
+    && wget -q https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${GRAALVM_VERSION}/${GRAALVM_FILE_NAME} \
+    && tar -xzf ${GRAALVM_FILE_NAME} \
+    && rm ${GRAALVM_FILE_NAME} \
+    && gu install native-image \
+    && mkdir -p /usr/share/man/man1 \
+    && apt install -y maven
+
+# docker build --build-arg JAVA_VERSION=11 --build-arg GRAALVM_VERSION=21.1.0 -t gianlucamori/graalvm-compiler:1-java11-21.1.0 -f docker/GraalCompilerJavaDockerfile .
+# docker run --name graal-compiler-0 --rm -i -d gianlucamori/graalvm-compiler:1-java11-21.1.0 bash
+# docker exec -it graal-compiler-0 bash
+

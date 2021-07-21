@@ -1,11 +1,15 @@
-FROM ghcr.io/graalvm/graalvm-ce:ol7-java11-21.1.0 as builder
+#FROM ghcr.io/graalvm/graalvm-ce:ol7-java11-21.1.0 as builder
+#
+#WORKDIR /app
+#
+#RUN yum install -y wget
+#RUN wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
+#RUN yum install -y apache-maven
+#RUN gu install native-image
+
+FROM gianlucamori/graalvm-compiler:1-java11-21.1.0
 
 WORKDIR /app
-
-RUN yum install -y wget
-RUN wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
-RUN yum install -y apache-maven
-RUN gu install native-image
 
 COPY pom.xml /app/pom.xml
 RUN mvn -q clean dependency:go-offline
