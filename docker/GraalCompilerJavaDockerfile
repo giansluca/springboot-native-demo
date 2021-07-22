@@ -10,7 +10,7 @@ ARG GRAALVM_FOLDER_NAME=graalvm-ce-java${JAVA_VERSION}-${GRAALVM_VERSION}
 ENV PATH "/opt/${GRAALVM_FOLDER_NAME}/bin:$PATH"
 ENV JAVA_HOME "/opt/${GRAALVM_FOLDER_NAME}"
 
-RUN apt update && apt install -y wget \
+RUN apt update && apt install -y wget build-essential gcc-multilib libz-dev \
     && wget -q https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${GRAALVM_VERSION}/${GRAALVM_FILE_NAME} \
     && tar -xzf ${GRAALVM_FILE_NAME} \
     && rm ${GRAALVM_FILE_NAME} \
