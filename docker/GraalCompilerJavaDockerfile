@@ -18,7 +18,10 @@ RUN apt update && apt install -y wget build-essential gcc-multilib libz-dev \
     && mkdir -p /usr/share/man/man1 \
     && apt install -y maven
 
-# docker build --build-arg JAVA_VERSION=11 --build-arg GRAALVM_VERSION=21.1.0 -t gianlucamori/graalvm-compiler:1-java11-21.1.0 -f docker/GraalCompilerJavaDockerfile .
-# docker run --name graal-compiler-0 --rm -i -d gianlucamori/graalvm-compiler:1-java11-21.1.0 bash
+# docker build --build-arg JAVA_VERSION=11 --build-arg GRAALVM_VERSION=21.1.0 -t gianlucamori/graalvm-compiler:java11-graal21.1.0 -f docker/GraalCompilerJavaDockerfile .
+# docker run --name graal-compiler-0 --rm -i -d gianlucamori/graalvm-compiler:java11-graal21.1.0 bash
 # docker exec -it graal-compiler-0 bash
+
+# docker login
+# docker image push gianlucamori/graalvm-compiler:java11-graal21.1.0
 
