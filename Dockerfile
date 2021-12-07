@@ -7,7 +7,7 @@
 #RUN yum install -y apache-maven
 #RUN gu install native-image
 
-FROM gianlucamori/graalvm-compiler:1-java11-21.1.0
+FROM gianlucamori/graalvm-compiler:1-java11-21.1.0 as builder
 
 WORKDIR /app
 
