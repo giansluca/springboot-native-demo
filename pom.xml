@@ -6,32 +6,26 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.1</version>
+        <version>3.0.2</version>
         <relativePath/>
     </parent>
 
     <groupId>org.gmdev</groupId>
     <artifactId>springboot-native-demo</artifactId>
     <version>1.0.0-SNAPSHOT</version>
+
     <name>springboot-native-demo</name>
     <description>Native Demo project for Spring Boot</description>
 
     <properties>
-        <java.version>11</java.version>
-        <spring-native.version>0.10.1</spring-native.version>
-        <spring-aot-maven-plugin.version>0.10.1</spring-aot-maven-plugin.version>
-        <graalvm.version>21.1.0</graalvm.version>
+        <java.version>17</java.version>
+        <native.maven.plugin.version>0.9.20</native.maven.plugin.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.experimental</groupId>
-            <artifactId>spring-native</artifactId>
-            <version>${spring-native.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -43,18 +37,11 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.graalvm.sdk</groupId>
-            <artifactId>graal-sdk</artifactId>
-            <version>${graalvm.version}</version>
-            <scope>provided</scope>
-        </dependency>
     </dependencies>
 
     <build>
         <finalName>springboot-native-demo</finalName>
         <plugins>
-
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -68,6 +55,15 @@
                 </configuration>
             </plugin>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.10.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -77,26 +73,38 @@
             <build>
                 <finalName>springboot-native-demo</finalName>
                 <plugins>
-
                     <plugin>
-                        <groupId>org.graalvm.nativeimage</groupId>
-                        <artifactId>native-image-maven-plugin</artifactId>
-                        <version>${graalvm.version}</version>
+                        <groupId>org.graalvm.buildtools</groupId>
+                        <artifactId>native-maven-plugin</artifactId>
+                        <version>${native.maven.plugin.version}</version>
                         <configuration>
                             <mainClass>org.gmdev.springbootnativedemo.SpringbootNativeDemoApplication</mainClass>
                             <imageName>app.out</imageName>
+                            <fallback>false</fallback>
                             <buildArgs>
-                                --no-fallback
-                                -H:+StaticExecutableWithDynamicLibC
+                                <arg>-H:DashboardDump=fortune -H:+DashboardAll</arg>
                             </buildArgs>
-                            <skip>false</skip>
+                            <agent>
+                                <enabled>true</enabled>
+                                <options>
+                                    <option>experimental-class-loader-support</option>
+                                </options>
+                            </agent>
                         </configuration>
                         <executions>
                             <execution>
+                                <id>build-native</id>
                                 <goals>
-                                    <goal>native-image</goal>
+                                    <goal>build</goal>
                                 </goals>
                                 <phase>package</phase>
+                            </execution>
+                            <execution>
+                                <id>test-native</id>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <phase>test</phase>
                             </execution>
                         </executions>
                     </plugin>
@@ -111,68 +119,21 @@
                                     <artifactId>lombok</artifactId>
                                 </exclude>
                             </excludes>
-                            <classifier>exec</classifier>
-                            <image>
-                                <builder>paketobuildpacks/builder:tiny</builder>
-                                <env>
-                                    <BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
-                                </env>
-                            </image>
                         </configuration>
                     </plugin>
 
                     <plugin>
-                        <groupId>org.springframework.experimental</groupId>
-                        <artifactId>spring-aot-maven-plugin</artifactId>
-                        <version>${spring-aot-maven-plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <id>test-generate</id>
-                                <goals>
-                                    <goal>test-generate</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>generate</id>
-                                <goals>
-                                    <goal>generate</goal>
-                                </goals>
-                            </execution>
-                        </executions>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.10.1</version>
+                        <configuration>
+                            <source>${java.version}</source>
+                            <target>${java.version}</target>
+                        </configuration>
                     </plugin>
-
                 </plugins>
             </build>
         </profile>
     </profiles>
-
-    <repositories>
-        <repository>
-            <id>spring-snapshots</id>
-            <name>Spring Snapshots</name>
-            <url>https://repo.spring.io/snapshot</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
-        <repository>
-            <id>spring-release</id>
-            <name>Spring Repository</name>
-            <url>https://repo.spring.io/plugins-release</url>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>spring-snapshots</id>
-            <name>Spring Snapshots</name>
-            <url>https://repo.spring.io/snapshot</url>
-        </pluginRepository>
-        <pluginRepository>
-            <id>spring-release</id>
-            <name>Spring Repository</name>
-            <url>https://repo.spring.io/plugins-release</url>
-        </pluginRepository>
-    </pluginRepositories>
 
 </project>
