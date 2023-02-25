@@ -6,7 +6,7 @@ services:
     image: springboot-native-demo:latest
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: docker/Dockerfile-native
     environment:
       - SPRING_PROFILES_ACTIVE=dev
     ports:

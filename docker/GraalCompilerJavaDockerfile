@@ -1,4 +1,4 @@
-FROM debian:buster-slim
+FROM debian:bullseye-slim
 
 WORKDIR /opt
 
@@ -19,6 +19,7 @@ RUN apt update && apt install -y wget build-essential gcc-multilib libz-dev \
     && apt install -y maven
 
 # docker build --build-arg JAVA_VERSION=17 --build-arg GRAALVM_VERSION=22.3.1 -t gianlucamori/graalvm-compiler:java17-graal22.3.1 -f docker/GraalCompilerJavaDockerfile .
+
 # docker run --name graal-compiler-0 --rm -i -d gianlucamori/graalvm-compiler:java17-graal22.3.1 bash
 # docker exec -it graal-compiler-0 bash
 
