@@ -1,4 +1,4 @@
-FROM gianlucamori/graalvm-compiler:java17-graal22.3.1 as builder
+FROM gianlucamori/graalvm-compiler:java17-graal22.3.3 as builder
 
 WORKDIR /build/app
 ADD . /build/app

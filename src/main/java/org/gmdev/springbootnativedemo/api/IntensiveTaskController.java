@@ -44,13 +44,13 @@ public class IntensiveTaskController {
             list.add(future);
         }
 
-        for(Future<String> future : list){
+        for (Future<String> future : list) {
             try {
                 String result = future.get();
                 log.info("Result is: {}", result);
 
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage());
             }
         }
     }
