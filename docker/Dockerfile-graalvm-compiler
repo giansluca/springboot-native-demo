@@ -1,0 +1,22 @@
+FROM debian:bookworm-slim
+
+WORKDIR /opt
+
+ARG JAVA_VERSION
+ARG GRAALVM_FILE_NAME=graalvm-community-jdk-${JAVA_VERSION}_linux-x64_bin.tar.gz
+ARG GRAALVM_FOLDER_NAME=graalvm-home
+
+ENV PATH "/opt/${GRAALVM_FOLDER_NAME}/bin:$PATH"
+ENV JAVA_HOME "/opt/${GRAALVM_FOLDER_NAME}"
+
+RUN apt update && apt install -y wget build-essential gcc-multilib libz-dev \
+    && wget -q https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-${JAVA_VERSION}/graalvm-community-jdk-${JAVA_VERSION}_linux-x64_bin.tar.gz \
+    && mkdir ${GRAALVM_FOLDER_NAME} \
+    && tar -xzf ${GRAALVM_FILE_NAME} --strip-components=1 -C graalvm-home \
+    && rm ${GRAALVM_FILE_NAME} \
+    && apt install -y maven
+
+# docker build --build-arg JAVA_VERSION=21.0.1 -t gianlucamori/graalvm-compiler:java21 -f docker/Dockerfile-graalvm-compiler .
+# docker run --name graal-compiler-0 --rm -i -d gianlucamori/graalvm-compiler:java21 bash
+# docker exec -it graal-compiler-0 bash
+

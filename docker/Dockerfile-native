@@ -1,10 +1,10 @@
-FROM gianlucamori/graalvm-compiler:java17-graal22.3.3 as builder
+FROM gianlucamori/graalvm-compiler:java21 as builder
 
 WORKDIR /build/app
 ADD . /build/app
 RUN mvn clean package -P native -DskipTests
 
-FROM gcr.io/distroless/base-debian11
+FROM gcr.io/distroless/base-debian12
 COPY --from=builder /build/app/target/springboot-native.out /
 
 # docker build -t springboot-native:latest -f docker/Dockerfile-native .

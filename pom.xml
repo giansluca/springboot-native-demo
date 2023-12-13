@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.4</version>
+        <version>3.2.0</version>
         <relativePath/>
     </parent>
 
@@ -18,8 +18,7 @@
     <description>Native Demo project for Spring Boot</description>
 
     <properties>
-        <java.version>17</java.version>
-        <native.maven.plugin.version>0.9.28</native.maven.plugin.version>
+        <java.version>21</java.version>
     </properties>
 
     <dependencies>
@@ -47,9 +46,19 @@
                 <finalName>springboot-native</finalName>
                 <plugins>
                     <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>build-info</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
                         <groupId>org.graalvm.buildtools</groupId>
                         <artifactId>native-maven-plugin</artifactId>
-                        <version>${native.maven.plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>build-native</id>
@@ -60,67 +69,29 @@
                             </execution>
                         </executions>
                         <configuration>
+                            <skipNativeTests>true</skipNativeTests>
                             <mainClass>org.gmdev.springbootnativedemo.SpringbootNativeDemoApplication</mainClass>
                             <imageName>springboot-native.out</imageName>
-                            <skipNativeTests>true</skipNativeTests>
-                            <fallback>false</fallback>
-                            <buildArgs>
-                                <arg>-H:+StaticExecutableWithDynamicLibC</arg>
-                            </buildArgs>
-                        </configuration>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-maven-plugin</artifactId>
-                        <configuration>
-                            <excludes>
-                                <exclude>
-                                    <groupId>org.projectlombok</groupId>
-                                    <artifactId>lombok</artifactId>
-                                </exclude>
-                            </excludes>
-                        </configuration>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <version>3.11.0</version>
-                        <configuration>
-                            <source>${java.version}</source>
-                            <target>${java.version}</target>
                         </configuration>
                     </plugin>
                 </plugins>
             </build>
         </profile>
         <profile>
-            <id>classic</id>
+            <id>jvm</id>
             <build>
-                <finalName>springboot-classic</finalName>
+                <finalName>springboot-jvm</finalName>
                 <plugins>
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
-                        <configuration>
-                            <excludes>
-                                <exclude>
-                                    <groupId>org.projectlombok</groupId>
-                                    <artifactId>lombok</artifactId>
-                                </exclude>
-                            </excludes>
-                        </configuration>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <version>3.10.1</version>
-                        <configuration>
-                            <source>${java.version}</source>
-                            <target>${java.version}</target>
-                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>build-info</goal>
+                                </goals>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>

@@ -1,12 +1,12 @@
-FROM maven:3.8.7-eclipse-temurin-17-alpine as builder
+FROM maven:3.8.7-eclipse-temurin-21-alpine as builder
 
 WORKDIR /build/app
 ADD . /build/app
-RUN mvn clean package -P classic -DskipTests
+RUN mvn clean package -P jvm -DskipTests
 
 FROM eclipse-temurin:17-jdk-alpine
 COPY --from=builder /build/app/target/springboot-classic.jar /
 
-# docker build -t springboot-classic:latest -f docker/Dockerfile-classic .
+# docker build -t springboot-classic:latest -f docker/Dockerfile-jvm .
 # docker run --name springboot-classic-1 -e 'PORT=8083' -p 8083:8083 -d springboot-classic:latest java -jar ./springboot-classic.jar
 
