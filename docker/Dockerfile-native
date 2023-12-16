@@ -4,8 +4,8 @@ WORKDIR /build/app
 ADD . /build/app
 RUN mvn clean package -P native -DskipTests
 
-FROM gcr.io/distroless/base-debian12
-COPY --from=builder /build/app/target/springboot-native.out /
+FROM debian:bookworm-slim
+COPY --from=builder /build/app/target/springboot-native.out /opt
 
 # docker build -t springboot-native:latest -f docker/Dockerfile-native .
-# docker run --name springboot-native-1 -e 'PORT=8082' -p 8082:8082 -d springboot-native:latest ./springboot-native.out
+# docker run --name springboot-native-1 -e 'PORT=8082' -p 8082:8082 springboot-native:latest ./opt/springboot-native.out
